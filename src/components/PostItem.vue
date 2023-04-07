@@ -5,18 +5,21 @@
       <div><strong>Опис: </strong>{{ post.body }}</div>
     </div>
     <div class="post__btn">
-      <button>Видалити</button>
+      <MyButton>Видалити</MyButton>
     </div>
   </div>
 </template>
 <script>
+
 export default {
-  props: {
-    post: {
-      type: Object,
-      required: true,
+
+    props: {
+        post: {
+            type: Object,
+            required: true,
+        },
     },
-  },
+   
 };
 </script>
 

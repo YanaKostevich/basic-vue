@@ -8,36 +8,36 @@
       type="text"
       placeholder="Назва"
     />
-    <input v-model="post.body" class="input" type="text" placeholder="Опис" />
-    <MyButton class="btn" @:click="сreatePost">Створити</MyButton>
+    <input 
+      v-model="post.body"
+      class="input"
+      type="text"
+      placeholder="Опис" />
+    <MyButton @:click="сreatePost">Створити</MyButton>
   </form>
 </template>
 <script>
-import { emit } from 'process';
-import MyButton from "@/components/UI/MyButton.vue";
+import { emit } from "process";
+
 export default {
-  components:{
-    MyButton
-  },
   data() {
     return {
       post: {
-        title: '',
-        body: '',
+        title: "",
+        body: "",
       },
     };
   },
-  methods:{
-    сreatePost(){
+  methods: {
+    сreatePost() {
       this.post.id = Date.now();
-      this.$emit('create', this.post)
+      this.$emit("create", this.post);
       this.post = {
-        title: '',
-        body: '',
-      }
-    }
-  }
-
+        title: "",
+        body: "",
+      };
+    },
+  },
 };
 </script>
 <style scoped>
