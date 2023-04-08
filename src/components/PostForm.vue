@@ -1,16 +1,14 @@
 <template>
   <form @submit.prevent>
-    <h4>створення поста</h4>
-    <input
+    <h4>Cтворення поста</h4>
+    <MyInput
       v-model="post.title"
       @:input="post.title = $event.target.value"
-      class="input"
       type="text"
       placeholder="Назва"
     />
-    <input 
+    <MyInput 
       v-model="post.body"
-      class="input"
       type="text"
       placeholder="Опис" />
     <MyButton @:click="сreatePost">Створити</MyButton>
@@ -53,10 +51,5 @@ form {
   color: green;
   border: 1px solid green;
 }
-.input {
-  width: 100%;
-  border: 1px solid green;
-  padding: 10px 15px;
-  margin-top: 15px;
-}
+
 </style>
