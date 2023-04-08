@@ -1,17 +1,17 @@
 <template>
   <form @submit.prevent>
     <h4>Cтворення поста</h4>
-    <MyInput
+    <my-input
       v-model="post.title"
       @:input="post.title = $event.target.value"
       type="text"
       placeholder="Назва"
     />
-    <MyInput 
+    <my-input 
       v-model="post.body"
       type="text"
       placeholder="Опис" />
-    <MyButton @:click="сreatePost">Створити</MyButton>
+    <my-button @:click="сreatePost">Створити</my-button>
   </form>
 </template>
 <script>
