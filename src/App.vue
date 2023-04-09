@@ -16,18 +16,19 @@
 
         <PostList :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading"/>
         <div v-else>Загрузка...</div>
-        <div class="page__wrapper">
-            <div
-                    v-for="pageNumber in totalPages"
-                    :key="pageNumber" class="page"
-                    :class="{
-                        'current-page': page === pageNumber
-                    }"
-                    @click="changePage(pageNumber)"
-            >
-                {{ pageNumber }}
-            </div>
-        </div>
+        <div ref="observer" class="observer"></div>
+<!--        <div class="page__wrapper">-->
+<!--            <div-->
+<!--                    v-for="pageNumber in totalPages"-->
+<!--                    :key="pageNumber" class="page"-->
+<!--                    :class="{-->
+<!--                        'current-page': page === pageNumber-->
+<!--                    }"-->
+<!--                    @click="changePage(pageNumber)"-->
+<!--            >-->
+<!--                {{ pageNumber }}-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </template>
 
@@ -65,10 +66,10 @@ export default {
         showDialog() {
             this.dialogVisible = true;
         },
-        changePage(pageNumber){
-            this.page = pageNumber
-            this.fetchPosts()
-        },
+        // changePage(pageNumber){
+        //     this.page = pageNumber
+        //     this.fetchPosts()
+        // },
         async fetchPosts() {
             try {
                 this.isPostsLoading = true;
@@ -88,28 +89,43 @@ export default {
                 this.isPostsLoading = false;
             }
         },
-        // async loadMorePosts() {
-        //     try {
-        //         this.isPostsLoading = true;
-        //         const response = await axios.get(
-        //             "https://jsonplaceholder.typicode.com/posts", {
-        //                 params: {
-        //                     _page: this.page,
-        //                     _limit: this.limit
-        //                 }
-        //             }
-        //         );
-        //         this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-        //         this.posts = [...this.posts, ...response.data];
-        //     } catch (e) {
-        //         alert("Помилка");
-        //     } finally {
-        //         this.isPostsLoading = false;
-        //     }
-        // },
+        async loadMorePosts() {
+            try {
+                this.page += 1;
+                // this.isPostsLoading = true;
+                const response = await axios.get(
+                    "https://jsonplaceholder.typicode.com/posts", {
+                        params: {
+                            _page: this.page,
+                            _limit: this.limit
+                        }
+                    }
+                );
+                this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
+                this.posts = [...this.posts, ...response.data];
+            } catch (e) {
+                alert("Помилка");
+            }
+            // finally {
+            //     this.isPostsLoading = false;
+            // }
+        },
     },
     mounted() {
         this.fetchPosts();
+        console.log(this.$refs.observer);
+        const options = {
+            rootMargin: '0px',
+            threshold: 1.0
+        }
+        const callback = (entries, observer) => {
+            if (entries[0].isIntersecting && this.page < this.totalPages){
+                this.loadMorePosts()
+            }
+
+        };
+        const observer = new IntersectionObserver(callback, options);
+        observer.observe(this.$refs.observer)
     },
     computed: {
         sortedPosts() {
@@ -142,18 +158,20 @@ export default {
     justify-content: space-between;
     margin: 15px 0;
 }
+.observer{
 
-.page__wrapper {
-    display: flex;
-    margin-top: 15px;
 }
+/*.page__wrapper {*/
+/*    display: flex;*/
+/*    margin-top: 15px;*/
+/*}*/
 
-.page {
-    border: 1px solid #000;
-    padding: 10px;
-}
+/*.page {*/
+/*    border: 1px solid #000;*/
+/*    padding: 10px;*/
+/*}*/
 
-.current-page {
-    border: 2px solid green;
-}
+/*.current-page {*/
+/*    border: 2px solid green;*/
+/*}*/
 </style>
