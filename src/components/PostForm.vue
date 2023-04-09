@@ -2,6 +2,7 @@
     <form @submit.prevent>
         <h4>Cтворення поста</h4>
         <my-input
+                v-focus
                 v-model="post.title"
                 @:input="post.title = $event.target.value"
                 type="text"
